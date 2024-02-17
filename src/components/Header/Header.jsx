@@ -3,8 +3,9 @@ function Header() {
     <header className="shadow-md fixed top-0 left-0 right-0 h-20 bg-white z-[1000] px-4">
       <div>
         <div className="max-w-[1200px] min-w-[1200px] relative my-0 mx-auto flex items-center h-20">
-          <a href="/" className="mr-4" title="Swiggy">
-            <svg
+          <a href="/" className="mr-2" title="Swiggy">
+            <img src="foodGy.png" className="h-28" />
+            {/* <svg
               className="_8pSp-"
               viewBox="0 0 559 825"
               height="49"
@@ -30,7 +31,7 @@ function Header() {
                   <stop offset="1" stopColor="#F15700"></stop>
                 </linearGradient>
               </defs>
-            </svg>
+            </svg> */}
           </a>
 
           <div className="relative flex items-center ml-7 cursor-pointer mb-[-1px] pr-[10px] text-sm">
