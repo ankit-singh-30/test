@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Offer from "../Offer";
 import ItemCards from "../ItemCards";
+import ShimmerUI from "../ShimmerUI/ShimmerUI";
 
 function RestaurantDetails() {
   const { id } = useParams();
@@ -22,10 +23,12 @@ function RestaurantDetails() {
       json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.offers
     );
   };
-  return (
+  return restaurantDetail.length === 0 ? (
+    <ShimmerUI />
+  ) : (
     <div className="pt-10 m-auto max-w-[800px]">
       <div className="-mt-4 mb-4 text-[.65rem]">
-        <span className="text-gray-400">Home / Indore / </span>
+        <span className="text-gray-400">Home / Banglore / </span>
         <span>{restaurantDetail[0]?.card?.card?.info?.name}</span>
       </div>
 
@@ -57,7 +60,7 @@ function RestaurantDetails() {
         </div>
 
         <ul>
-          <li className="text-[#7e808c] mb-4 flex text-sm">
+          <li className="text-[#7e808c] mb-4 flex text-[13px]">
             <img
               src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_18,h_18/${restaurantDetail[0]?.card?.card?.info?.feeDetails.icon}`}
               className="mr-2"

@@ -1,12 +1,34 @@
+import { useRef, useState } from "react";
 import { BANNER_CDN_URL } from "../utils/constant";
 
 function Banner({ banners }) {
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  const ref = useRef();
+  // function to handle scrollingwhen the button is clicked
+  const handleScroll = (scrollAmount) => {
+    //calculate the new scroll position
+    const newScrollPosition = scrollPosition + scrollAmount;
+
+    // update the state with new scroll position
+    setScrollPosition(newScrollPosition);
+
+    ref.current.scrollLeft = newScrollPosition;
+  };
+
   return (
     <div className="mx-52 m-0">
       <div>
         <div className="relative">
           <div className="flex absolute mt-3 right-4">
-            <button className="cursor-pointer inline m-0 p-0 opacity-[0.5]">
+            <button
+              className={`cursor-pointer inline m-0 p-0 ${
+                scrollPosition !== 0 && scrollPosition > 0
+                  ? "opacity-[0.8]"
+                  : "opacity-[0.5]"
+              }`}
+              onClick={() => handleScroll(-600)}
+            >
               <div className="mr-3 rounded-full h-[34px] px-2 pt-2 pb-1 bg-[#E2E2E7]">
                 <svg
                   width="17"
@@ -24,8 +46,12 @@ function Banner({ banners }) {
               </div>
             </button>
             <button
-              className="cursor-pointer inline m-0 p-0 opacity-[0.5]"
-              onClick={() => scroll(6)}
+              className={`cursor-pointer inline m-0 p-0 ${
+                scrollPosition === 0 || scrollPosition > 0
+                  ? "opacity-[0.8]"
+                  : "opacity-[0.5]"
+              }`}
+              onClick={() => handleScroll(600)}
             >
               <div className="mr-3 rounded-full h-[34px] px-2 pt-2 pb-1 bg-[#E2E2E7]">
                 <svg
@@ -44,6 +70,7 @@ function Banner({ banners }) {
               </div>
             </button>
           </div>
+
           <div>
             <div className="p-4 overflow-hidden">
               <div className="mb-4 flex justify-between items-baseline overflow-hidden">
@@ -55,7 +82,10 @@ function Banner({ banners }) {
                 </div>
               </div>
               <div className="overflow-x-hidden overflow-y-hidden">
-                <div className="flex pt-0">
+                <div
+                  className="flex pt-0 scroll-smooth overflow-x-hidden"
+                  ref={ref}
+                >
                   {banners.imageGridCards?.info.map((b) => (
                     <div className="w-full pr-6" key={b.id}>
                       <div>

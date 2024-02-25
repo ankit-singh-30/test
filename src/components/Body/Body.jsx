@@ -13,6 +13,10 @@ function Body() {
     (store) => store.restaurants?.restaurantItems
   );
 
+  const topRestaurants = useSelector(
+    (store) => store.restaurants?.topRestaurants
+  );
+
   return restaurantItems.length === 0 ? (
     <ShimmerUI />
   ) : (
@@ -26,8 +30,11 @@ function Body() {
                 <hr className="border border-solid border-[#F0F0F5] my-8 mx-56" />
               </>
             )}
-
-            <TopResturant />
+            <TopResturant
+              topRestaurants={
+                topRestaurants.gridElements?.infoWithStyle?.restaurants
+              }
+            />
             <RestaurantContainer restaurants={restaurantItems} />
           </main>
         </div>

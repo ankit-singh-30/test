@@ -1,4 +1,5 @@
 import RestaurantCard from "./RestaurantCard";
+import Filter from "../Filter/Filter";
 
 function RestaurantContainer({ restaurants }) {
   return (
@@ -12,7 +13,7 @@ function RestaurantContainer({ restaurants }) {
       </div>
       <div className="h-4"></div>
 
-      <div className="filter"></div>
+      <Filter />
 
       <div className="mx-52 m-0">
         <div>
