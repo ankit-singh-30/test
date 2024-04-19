@@ -1,26 +1,30 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
+import { useSelector } from "react-redux";
 import Offer from "../Offer";
 import ItemCards from "../ItemCards";
 import ShimmerUI from "../ShimmerUI/ShimmerUI";
+import { getMenuAPIURL } from "../../utils/constant";
 
 function RestaurantDetails() {
   const { id } = useParams();
   const [restaurantDetail, setRestaurantsDetail] = useState([]);
   const [offers, setOffers] = useState([]);
 
+  const location = useSelector((store) => store.location.location);
+  const { lat, lng } = location;
+
   useEffect(() => {
     fetchRestaurantDetails();
   }, []);
 
   const fetchRestaurantDetails = async () => {
-    const data = await fetch(
-      `https://www.swiggy.com/dapi/menu/pl?page-type=REGULAR_MENU&complete-menu=true&lat=22.7195687&lng=75.8577258&restaurantId=${id}`
-    );
+    const data = await fetch(getMenuAPIURL(lat, lng, id));
     const json = await data.json();
+
     setRestaurantsDetail(json?.data?.cards);
     setOffers(
-      json?.data?.cards[1]?.card?.card?.gridElements?.infoWithStyle?.offers
+      json?.data?.cards[3]?.card?.card?.gridElements?.infoWithStyle?.offers
     );
   };
   return restaurantDetail.length === 0 ? (
@@ -29,7 +33,7 @@ function RestaurantDetails() {
     <div className="pt-10 m-auto max-w-[800px]">
       <div className="-mt-4 mb-4 text-[.65rem]">
         <span className="text-gray-400">Home / Banglore / </span>
-        <span>{restaurantDetail[0]?.card?.card?.info?.name}</span>
+        <span>{restaurantDetail[0]?.card?.card?.text}</span>
       </div>
 
       <div className="mx-4">
@@ -37,24 +41,24 @@ function RestaurantDetails() {
           <div className="inline-block w-[648px]">
             <div aria-hidden="true">
               <p className="font-semibold text-lg mb-1">
-                {restaurantDetail[0]?.card?.card?.info?.name}
+                {restaurantDetail[0]?.card?.card?.text}
               </p>
               <p className="text-xs text-[#7e808c] mb-1">
-                {restaurantDetail[0]?.card?.card?.info?.cuisines.join(", ")}
+                {restaurantDetail[2]?.card?.card?.info?.cuisines.join(", ")}
               </p>
             </div>
             <p className="text-xs text-gray-500">
-              {restaurantDetail[0]?.card?.card?.info?.areaName},{" "}
-              {restaurantDetail[0]?.card?.card?.info?.sla?.lastMileTravelString}
+              {restaurantDetail[2]?.card?.card?.info?.areaName},{" "}
+              {restaurantDetail[2]?.card?.card?.info?.sla?.lastMileTravelString}
             </p>
           </div>
 
           <button className="rounded-lg border shadow-md text-sm text-center p-2 float-right">
             <span className="block pb-2 mb-2 border-b-[1px] text-[#3d9b6d] font-bold">
-              ⭐ {restaurantDetail[0]?.card?.card?.info?.avgRating}
+              ⭐ {restaurantDetail[2]?.card?.card?.info?.avgRating}
             </span>
             <span className="text-xs text-[#8b8d97] font-semibold">
-              {restaurantDetail[0]?.card?.card?.info?.totalRatingsString}
+              {restaurantDetail[2]?.card?.card?.info?.totalRatingsString}
             </span>
           </button>
         </div>
@@ -62,11 +66,11 @@ function RestaurantDetails() {
         <ul>
           <li className="text-[#7e808c] mb-4 flex text-[13px]">
             <img
-              src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_18,h_18/${restaurantDetail[0]?.card?.card?.info?.feeDetails.icon}`}
+              src={`https://media-assets.swiggy.com/swiggy/image/upload/fl_lossy,f_auto,q_auto,w_18,h_18/${restaurantDetail[2]?.card?.card?.info?.feeDetails.icon}`}
               className="mr-2"
             />
             <span className="flex">
-              {restaurantDetail[0]?.card?.card?.info?.feeDetails.message}
+              {restaurantDetail[2]?.card?.card?.info?.feeDetails.message}
             </span>
           </li>
         </ul>
@@ -96,8 +100,8 @@ function RestaurantDetails() {
                 ></path>
               </svg>
               <span>
-                {restaurantDetail[0]?.card?.card?.info?.sla?.slaString
-                  ? restaurantDetail[0]?.card?.card?.info?.sla?.slaString
+                {restaurantDetail[2]?.card?.card?.info?.sla?.slaString
+                  ? restaurantDetail[2]?.card?.card?.info?.sla?.slaString
                   : "Service Not Available"}
               </span>
             </li>
@@ -123,7 +127,7 @@ function RestaurantDetails() {
                 ></path>
               </svg>
               <span>
-                {restaurantDetail[0]?.card?.card?.info?.costForTwoMessage}
+                {restaurantDetail[2]?.card?.card?.info?.costForTwoMessage}
               </span>
             </li>
           </ul>
@@ -131,9 +135,10 @@ function RestaurantDetails() {
 
         <div>
           <div className="flex">
-            {offers.map((offer) => (
-              <Offer key={offer?.info?.offerIds[0]} offer={offer.info} />
-            ))}
+            {offers &&
+              offers.map((offer) => (
+                <Offer key={offer?.info?.offerIds[0]} offer={offer.info} />
+              ))}
           </div>
         </div>
         {/* offer */}
@@ -156,13 +161,13 @@ function RestaurantDetails() {
             <h3 className="text-[#3e4152] font-extrabold text-[1rem] inline-block">
               <span aria-hidden="true">
                 {
-                  restaurantDetail[2]?.groupedCard?.cardGroupMap?.REGULAR
-                    ?.cards[1]?.card?.card?.title
+                  restaurantDetail[4]?.groupedCard?.cardGroupMap?.REGULAR
+                    ?.cards[2]?.card?.card?.title
                 }{" "}
                 (
                 {
-                  restaurantDetail[2]?.groupedCard?.cardGroupMap?.REGULAR
-                    ?.cards[1]?.card?.card?.itemCards.length
+                  restaurantDetail[4]?.groupedCard?.cardGroupMap?.REGULAR
+                    ?.cards[2]?.card?.card?.itemCards.length
                 }
                 )
               </span>
@@ -170,7 +175,7 @@ function RestaurantDetails() {
           </button>
 
           <div>
-            {restaurantDetail[2]?.groupedCard?.cardGroupMap?.REGULAR?.cards[1]?.card?.card?.itemCards.map(
+            {restaurantDetail[4]?.groupedCard?.cardGroupMap?.REGULAR?.cards[2]?.card?.card?.itemCards.map(
               (itemCard) => (
                 <ItemCards
                   key={itemCard.card?.info?.id}
